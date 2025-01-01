@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> صحتي في وزني</title>
+    
+    <!-- إضافة صورة الشريط العلوي هنا -->
+    <link rel="icon" href="https://upload.wikimedia.org/wikipedia/commons/e/e2/Logo_of_Jordan.png" type="image/png">
+    
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background: url('https://i.pinimg.com/736x/7e/2b/9a/7e2b9a5ab41f03efa42afa95e505da0f.jpg') no-repeat center center fixed;
+            background-size: cover;
+            color: #333;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            height: 100vh;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        body.night-mode {
+            background-color: #121212;
+            color: #fff;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 800px; /* Adjusting the max-width for a more consistent design */
+            background: rgba(255, 255, 255, 0.7); /* background with transparency */
+            color: #333;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .container.night-mode {
+            background: rgba(30, 30, 30, 0.7);
+            color: #fff;
+        }
+
+        h1 {
+            font-size: 2.5em; /* Adjusting font size for better readability */
+            margin-bottom: 20px;
+            color: #4CAF50; /* New color inspired by the image */
+            padding: 20px;
+            color: white;
+            text-align: center;
+        }
+
+        label {
+            display: block;
+            margin: 10px 0 5px;
+            font-size: 1.1em;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 10px;
+            font-size: 1em;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin-bottom: 15px;
+        }
+
+        button {
+            width: 48%;
+            padding: 12px;
+            font-size: 1.2em;
+            background: #4CAF50; /* Matching button color */
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: transform 0.3s ease, background-color 0.3s ease;
+            margin: 5px;
+        }
+
+        button:hover {
+            background: #45a049;
+            transform: scale(1.05);
+        }
+
+        #result, #advice {
+            margin-top: 20px;
+            font-size: 1.2em;
+        }
+
+        .toggle-mode {
+            position: absolute;
+            top: 10px;
+            right: 20px;
+            cursor: pointer;
+            font-size: 1.2em;
+        }
+
+        .lang-switch {
+            position: absolute;
+            top: 10px;
+            left: 20px;
+            cursor: pointer;
+            font-size: 1.2em;
+        }
+    </style>
+</head>
+<body>
+    <span class="toggle-mode" onclick="toggleMode()">🌙</span>
+    <span class="lang-switch" onclick="switchLanguage()">EN</span>
+    <div class="container">
+        <h1 id="site-title" style="color: #4CAF50;">  قياس الوزن </h1>
+        <form id="bmiForm">
+            <label for="gender" id="gender-label">الجنس:</label>
+            <select id="gender" required>
+                <option value="male" id="male-option">ذكر</option>
+                <option value="female" id="female-option">أنثى</option>
+            </select>
+
+            <label for="age" id="age-label">العمر (بالسنوات):</label>
+            <input type="number" id="age" required placeholder="أدخل عمرك">
+
+            <label for="weight" id="weight-label">الوزن (بالكيلوغرام):</label>
+            <input type="number" id="weight" required placeholder="أدخل وزنك">
+
+            <label for="height" id="height-label">الطول (بالسنتمتر):</label>
+            <input type="number" id="height" required placeholder="أدخل طولك">
+
+            <button type="submit" id="calculate-button">احسب مؤشر كتلة الجسم</button>
+            <button type="button" id="resetButton">إعادة تعيين</button>
+        </form>
+
+        <div id="result"></div>
+        <div id="advice"></div>
+    </div>
+
+    <script>
+        let language = 'ar'; // Default language is Arabic
+
+        function toggleMode() {
+            document.body.classList.toggle('night-mode');
+            document.querySelector('.container').classList.toggle('night-mode');
+        }
+
+        function switchLanguage() {
+            if (language === 'ar') {
+                language = 'en';
+                document.getElementById('site-title').innerText = 'Weight Measurement';
+                document.getElementById('gender-label').innerText = 'Gender:';
+                document.getElementById('male-option').innerText = 'Male';
+                document.getElementById('female-option').innerText = 'Female';
+                document.getElementById('age-label').innerText = 'Age (in years):';
+                document.getElementById('weight-label').innerText = 'Weight (kg):';
+                document.getElementById('height-label').innerText = 'Height (cm):';
+                document.getElementById('calculate-button').innerText = 'Calculate BMI';
+                document.getElementById('resetButton').innerText = 'Reset';
+                document.querySelector('.lang-switch').innerText = 'عربي';
+            } else {
+                language = 'ar';
+                document.getElementById('site-title').innerText = 'قياس الوزن';
+                document.getElementById('gender-label').innerText = 'الجنس:';
+                document.getElementById('male-option').innerText = 'ذكر';
+                document.getElementById('female-option').innerText = 'أنثى';
+                document.getElementById('age-label').innerText = 'العمر (بالسنوات):';
+                document.getElementById('weight-label').innerText = 'الوزن (بالكيلوغرام):';
+                document.getElementById('height-label').innerText = 'الطول (بالسنتمتر):';
+                document.getElementById('calculate-button').innerText = 'احسب مؤشر كتلة الجسم';
+                document.getElementById('resetButton').innerText = 'إعادة تعيين';
+                document.querySelector('.lang-switch').innerText = 'EN';
+            }
+        }
+
+        document.getElementById('bmiForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            const gender = document.getElementById('gender').value;
+            const age = parseInt(document.getElementById('age').value);
+            const weight = parseFloat(document.getElementById('weight').value);
+            const height = parseFloat(document.getElementById('height').value) / 100;
+
+            if (isNaN(weight) || isNaN(height) || weight <= 0 || height <= 0 || isNaN(age) || age <= 0) {
+                alert('يرجى إدخال قيم صحيحة!');
+                return;
+            }
+
+            const bmi = (weight / (height * height)).toFixed(2);
+            let advice = '';
+
+            if (bmi < 18.5) {
+                advice = language === 'ar' ? 'أنت تعاني من نقص الوزن. يُنصح بزيادة الوزن بشكل صحي.' : 'You are underweight. It is recommended to gain weight in a healthy way.';
+            } else if (bmi >= 18.5 && bmi < 24.9) {
+                advice = language === 'ar' ? 'وزنك طبيعي. استمر في الحفاظ على نمط حياة صحي.' : 'Your weight is normal. Keep maintaining a healthy lifestyle.';
+            } else if (bmi >= 25 && bmi < 29.9) {
+                advice = language === 'ar' ? 'أنت تعاني من زيادة الوزن. يُنصح بتقليل الوزن بشكل صحي.' : 'You are overweight. It is recommended to lose weight in a healthy way.';
+            } else {
+                advice = language === 'ar' ? 'أنت تعاني من السمنة. يُنصح بالتوجه إلى مختص للحصول على نصائح.' : 'You are obese. It is recommended to consult a specialist for advice.';
+            }
+
+            document.getElementById('result').innerText = `مؤشر كتلة الجسم (BMI): ${bmi}`;
+            document.getElementById('advice').innerText = advice;
+        });
+
+        document.getElementById('resetButton').addEventListener('click', function() {
+            document.getElementById('bmiForm').reset();
+            document.getElementById('result').innerText = '';
+            document.getElementById('advice').innerText = '';
+        });
+    </script>
+</body>
+</html>
